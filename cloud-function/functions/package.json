@@ -11,10 +11,16 @@
   "main": "lib/index.js",
   "dependencies": {
     "firebase-admin": "~7.0.0",
-    "firebase-functions": "^2.2.0"
+    "firebase-functions": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "@types/express": "^4.16.1"
   },
   "devDependencies": {
     "typescript": "^3.2.2"
   },
-  "private": true
+  "private": true,
+  "engines": {
+    "node": "8"
+  }
 }

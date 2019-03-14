@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {UploadService} from './upload.service';
 
 @Component({
   selector: 'app-root',
@@ -6,13 +7,11 @@ import {Component} from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  firebaseConfig = {
-    apiKey: 'AIzaSyCXenDFrC2ahriYim0K0XA4l_GLOtLngWU',
-    authDomain: 'qbank-d2679.firebaseapp.com',
-    databaseURL: 'https://qbank-d2679.firebaseio.com',
-    projectId: 'qbank-d2679',
-  };
   fileName: string;
+
+  constructor(private uploadService: UploadService) {
+
+  }
 
   onFileChange(file: any) {
     const reader = new FileReader();
@@ -23,8 +22,12 @@ export class AppComponent {
       const [file] = event.target.files;
       reader.readAsDataURL(file);
       reader.onload = () => {
-        console.log(reader.result);
-      };
+        this.uploadService.uploadFile(reader.result).subscribe(value => {
+            console.log(value);
+          }
+        );
+      }
+      ;
     }
   }
 }
