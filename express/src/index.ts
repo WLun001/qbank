@@ -3,7 +3,7 @@ import {MongoClient, MongoError} from 'mongodb';
 
 const cors = require('cors');
 const express = require('express');
-
+import {Request, Response} from 'express';
 const uri = 'mongodb+srv://admin:admin@cluster0-7odzu.mongodb.net/test?retryWrites=true';
 
 const app = express();
@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
 
-app.post('/upload', (req, res) => {
+app.post('/upload', (req: Request, res: Response) => {
   const data = req.body.data as string[];
   const sqData = readBody(data);
   saveToDatabase(sqData)
@@ -24,7 +24,7 @@ app.post('/upload', (req, res) => {
     }));
 });
 
-app.get('/search', (req, res) => {
+app.get('/search', (req: Request, res: Response) => {
   const keyword = req.query.keyword;
   console.log(keyword);
   if (keyword) {
@@ -32,7 +32,6 @@ app.get('/search', (req, res) => {
       const collection = c.db('qbank').collection('questions');
       collection.find({'Payload.QuestionDescription': new RegExp(keyword, 'i')})
         .toArray().then(x => {
-        // client.close().then(() => res.json(x));
         res.json(x);
         }
       ).catch(error => {
@@ -41,10 +40,9 @@ app.get('/search', (req, res) => {
       });
     });
   } else {
-    client.connect((err: any, c: MongoClient) => {
+    client.connect((err: MongoError, c: MongoClient) => {
       const collection = c.db('qbank').collection('questions');
       collection.find().toArray().then(x => {
-        // client.close().then(() => res.json(x));
         res.json(x);
         }
       ).catch(error => {
@@ -55,8 +53,8 @@ app.get('/search', (req, res) => {
   }
 });
 
-app.listen(5000, () => {
-  console.log('Example app listening on port 3000!');
+app.listen(8081, () => {
+  console.log('Example app listening on port 8081!');
 });
 
 function readBody(data: string[]) {
@@ -81,7 +79,6 @@ function saveToDatabase(sqData: {}[]) {
       }
       client.db('qbank')
         .collection('questions').insertMany(sqData).then(() => {
-        //client.close().then(x => resolve());
         resolve();
         }
       );
