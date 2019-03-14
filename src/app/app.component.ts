@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {UploadService} from './upload.service';
+import {AngularFirestore} from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-root',
@@ -9,8 +10,7 @@ import {UploadService} from './upload.service';
 export class AppComponent {
   fileName: string;
 
-  constructor(private uploadService: UploadService) {
-
+  constructor(private uploadService: UploadService, private ngFire: AngularFirestore) {
   }
 
   onFileChange(file: any) {
