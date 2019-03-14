@@ -2,6 +2,7 @@
   <h1>
     QBank
   </h1>
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
   <form class="example-form-field">
     <input (change)="onFileChange($event)" type="file">
     <button (click)="fileName=''" *ngIf="fileName" aria-label="Clear" mat-icon-button
@@ -9,10 +10,6 @@
       <mat-icon>close</mat-icon>
     </button>
   </form>
-  <mat-form-field>
-    <input (input)="onSearch()" matInput placeholder="search">
-  </mat-form-field>
-
-  <button mat-button>Upload file</button>
+  <app-questions-list></app-questions-list>
 </div>
 

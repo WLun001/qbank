@@ -1,14 +1,14 @@
+<mat-form-field>
+  <input #search (input)="onSearch(search.value)" matInput placeholder="search">
+</mat-form-field>
 <mat-card>
   <mat-card-title>Matches</mat-card-title>
   <mat-card-content>
     <mat-list>
-      <mat-list-item *ngFor="let question of questions">
+      <mat-list-item *ngFor="let question of questions$ | async">
+        {{question.SurveyID}}
+        <br>
         {{question.Payload.QuestionDescription}}
-        <!--<mat-list>-->
-        <!--<mat-list-item *ngFor="let choice of question.Payload.ChoiceOrder">-->
-
-        <!--</mat-list-item>-->
-        <!--</mat-list>-->
       </mat-list-item>
     </mat-list>
   </mat-card-content>

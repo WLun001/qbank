@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {UploadService} from './upload.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -8,16 +9,13 @@ import {UploadService} from './upload.service';
 })
 export class AppComponent {
   fileName: string;
+  isLoading = false;
 
-  constructor(private uploadService: UploadService) {
+  constructor(private uploadService: UploadService, private snackBar: MatSnackBar) {
   }
-
-  onSearch(keyword: string) {
-
-  }
-
 
   onFileChange(file: any) {
+    this.isLoading = true;
     const reader = new FileReader();
 
     // @ts-ignore
@@ -26,13 +24,21 @@ export class AppComponent {
       const [file] = event.target.files;
       reader.readAsDataURL(file);
       reader.onload = () => {
-        this.uploadService.uploadFile(reader.result).subscribe(value => {
-            console.log(value);
+        this.uploadService.uploadFile(reader.result).subscribe(() => {
+          reader.abort();
+          this.isLoading = false;
+          this.openSnackBar('Success');
           }
         );
       }
       ;
     }
+  }
+
+  openSnackBar(message: string) {
+    this.snackBar.open(message, 'ok', {
+      duration: 2000,
+    });
   }
 }
 

@@ -17,7 +17,7 @@ app.post('/upload', (req, res) => {
   const data = req.body.data as string[];
   const sqData = readBody(data);
   saveToDatabase(sqData)
-    .then(() => res.json({success: 'Received POST request!'}))
+    .then(() => res.json({success: 'Saved into database'}))
     .catch((error => {
       res.sendStatus(400);
       res.json({error});
@@ -30,8 +30,10 @@ app.get('/search', (req, res) => {
   if (keyword) {
     client.connect((err: any, c: MongoClient) => {
       const collection = c.db('qbank').collection('questions');
-      collection.find({'Payload.QuestionDescription': new RegExp(keyword, 'i')}).toArray().then(x => {
-          client.close().then(() => res.json(x));
+      collection.find({'Payload.QuestionDescription': new RegExp(keyword, 'i')})
+        .toArray().then(x => {
+        // client.close().then(() => res.json(x));
+        res.json(x);
         }
       ).catch(error => {
         res.sendStatus(400);
@@ -42,9 +44,13 @@ app.get('/search', (req, res) => {
     client.connect((err: any, c: MongoClient) => {
       const collection = c.db('qbank').collection('questions');
       collection.find().toArray().then(x => {
-          client.close().then(() => res.json(x));
+        // client.close().then(() => res.json(x));
+        res.json(x);
         }
-      );
+      ).catch(error => {
+        res.sendStatus(400);
+        res.json({error});
+      });
     });
   }
 });
@@ -75,7 +81,8 @@ function saveToDatabase(sqData: {}[]) {
       }
       client.db('qbank')
         .collection('questions').insertMany(sqData).then(() => {
-          client.close().then(x => resolve());
+        //client.close().then(x => resolve());
+        resolve();
         }
       );
     });
