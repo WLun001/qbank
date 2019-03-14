@@ -2,12 +2,14 @@
   <h1>
     QBank
   </h1>
-  <form class="example-form">
-    <mat-form-field class="example-full-width">
-      <input matInput placeholder="Favorite food">
-    </mat-form-field>
+  <mat-form-field class="example-form-field">
+    <input [(ngModel)]="fileName" [disabled]="true" matInput placeholder="File name" type="text">
+    <button (click)="fileName=''" *ngIf="fileName" aria-label="Clear" mat-icon-button
+            mat-raised-button matSuffix>
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
 
-    <button mat-button>Upload file</button>
-  </form>
+  <button mat-button>Upload file</button>
 </div>
 
