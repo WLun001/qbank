@@ -1,32 +1,29 @@
-// import * as functions from 'firebase-functions';
-//
-// import * as cors from 'cors';
-// const corsHandler = cors({origin: true});
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const qsfReader = functions.https.onRequest((request, response) => {
-//   return corsHandler(request, response, () => {
-//     console.log(request.body);
-//     response.send('Hello from Firebase!');
-//   });
-//
-// });
+import {MongoClient, MongoError} from 'mongodb';
 
 const functions = require('firebase-functions');
-const admin = require('firebase-admin');
 const express = require('express');
 const cors = require('cors');
 const app = express();
 
-
-admin.initializeApp(functions.config().firebase);
-const db = admin.firestore();
+const uri = 'mongodb+srv://admin:admin@cluster0-7odzu.mongodb.net/test?retryWrites=true';
 
 app.use(cors({origin: true}));
 
+
+// app.get('/search', (req: { query: { keyword: any; }; }, res: any) => {
+//   const keyword = req.query.keyword;
+//   client.connect((err: any, c: MongoClient) => {
+//     const db = c.db('qbank');
+//     db.collection('questions').find();
+//   });
+//
+//
+// });
+
+
 app.post('/upload', (req: { body: any; }, res: { end: (arg0: string) => void; }) => {
-  const ref = db.collection('data');
+  // const ref = db.collection('data');
+  const client = new MongoClient(uri, {useNewUrlParser: true});
   const data = req.body.data as Array<string>;
   const startIndex = data.indexOf(',');
   const formattedData = data.slice(startIndex).toString();
@@ -38,12 +35,15 @@ app.post('/upload', (req: { body: any; }, res: { end: (arg0: string) => void; })
     }
   });
   console.log(sqData);
-  sqData.forEach(element => {
-    ref.add(element).then((reference: { id: any; }) => {
-      console.log('function finish');
-      console.log(reference.id);
-      res.end('Received POST request!');
-    }).catch((error: any) => console.log(error));
+
+  console.log(client.isConnected());
+  client.connect((err: MongoError) => {
+    const db = client.db('qbank');
+    db.collection('questions').insertMany(sqData).then(() => {
+        client.close();
+        res.end('Received POST request!');
+      }
+    );
   });
 });
 

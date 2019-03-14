@@ -29,8 +29,6 @@ import {environment} from './config';
     MatGridListModule,
     FormsModule,
     HttpClientModule,
-    AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
