@@ -3,13 +3,15 @@ import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatButtonModule, MatIconModule, MatInputModule} from '@angular/material';
+import {MatButtonModule, MatCardModule, MatGridListModule, MatIconModule, MatInputModule} from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import {QuestionsComponent} from './questions/questions.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    QuestionsComponent
   ],
   imports: [
     BrowserModule,
@@ -17,6 +19,8 @@ import {HttpClientModule} from '@angular/common/http';
     MatInputModule,
     MatButtonModule,
     MatIconModule,
+    MatCardModule,
+    MatGridListModule,
     FormsModule,
     HttpClientModule,
   ],
